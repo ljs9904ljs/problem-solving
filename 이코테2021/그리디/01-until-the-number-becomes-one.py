@@ -1,5 +1,5 @@
 """
-출처: https://youtu.be/2zjoKjt97vQ?si=PpaK6DISWRoLL4Id
+문제 및 강의 출처: https://youtu.be/2zjoKjt97vQ?si=PpaK6DISWRoLL4Id
 
 유형: 그리디
 제목: 1이 될 때까지

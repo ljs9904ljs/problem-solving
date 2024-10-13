@@ -1,5 +1,5 @@
 """
-출처: https://youtu.be/7C9RgOcvkvo?si=3MYI12alOB_AJNKJ
+문제 및 강의 출처: https://youtu.be/7C9RgOcvkvo?si=3MYI12alOB_AJNKJ
 
 DFS랑 BFS를 구현해보자.
 

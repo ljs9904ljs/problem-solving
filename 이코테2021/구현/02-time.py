@@ -1,5 +1,5 @@
 """
-출처: https://youtu.be/2zjoKjt97vQ?si=PpaK6DISWRoLL4Id
+문제 및 강의 출처: https://youtu.be/2zjoKjt97vQ?si=PpaK6DISWRoLL4Id
 
 유형: 구현
 제목: 시각
