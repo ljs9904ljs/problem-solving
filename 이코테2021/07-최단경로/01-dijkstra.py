@@ -21,7 +21,7 @@ def dijkstra(graph, start):
         for j, weight in graph[i]:
             if dist[j] > dist[i] + weight:
                 dist[j] = dist[i] + weight
-                heapq.heappush(q, (dist[i], j))
+                heapq.heappush(q, (dist[j], j))
     
     return dist
                 
