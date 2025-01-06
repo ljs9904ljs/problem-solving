@@ -20,6 +20,23 @@ def dfs(graph, v, visited):
         if not visited[vertex]:
             dfs(graph, vertex, visited)
 
+def dfs_stack(graph, v, visited):
+    stack = list()
+    
+    stack.append(v)
+    
+    while len(stack) != 0:
+        cur = stack.pop()
+        
+        if not visited[cur]:
+            visited[cur] = True
+            print(cur, end=' ')
+            
+            for i in graph[cur]:
+                if not visited[i]:
+                    stack.append(i)
+                
+    print("\n")
 
 from collections import deque
 
@@ -88,7 +105,7 @@ graph = [
 
 visited = [False] * 9  # 1번 vertex ~ 8번 vertex, 0번은 사용하지 않음.
 
-dfs(graph, 1, visited)
+dfs_stack(graph, 1, visited)
 print("=======111=================")
 visited = [False] * 9  # 1번 vertex ~ 8번 vertex, 0번은 사용하지 않음.
 bfs_right(graph, 1, visited)
