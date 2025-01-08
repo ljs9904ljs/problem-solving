@@ -222,3 +222,9 @@ def process() -> int:
 
 
 print(process())
+
+"""
+다 푸는데 2시간 4분 정도 걸렸다.
+
+
+"""
