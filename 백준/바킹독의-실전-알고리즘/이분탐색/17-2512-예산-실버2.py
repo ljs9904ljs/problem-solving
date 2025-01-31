@@ -2,6 +2,10 @@
 
 문제 푸는 데 걸린 시간: 9분 32초
 
+note)
+parametric search 문제였다.
+
+
 """
 
 
