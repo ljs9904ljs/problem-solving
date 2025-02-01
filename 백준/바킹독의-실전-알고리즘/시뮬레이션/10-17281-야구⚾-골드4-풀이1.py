@@ -1,6 +1,6 @@
 """
 
-
+문제 푸는 데 걸린 시간: 3시간 55분 38초
 
 
 문제 풀기 전 note)
@@ -8,6 +8,16 @@
 
 4번 타자로 지명된 선수를 제외한 나머지 8명의 선수 리스트의 permutation 값
 
+
+문제 풀고 난 후 note)
+비트마스킹을 써서 시도했는데도 통과하지 못했다는 질문게시판의 글을 보았다.
+코드는 안 읽었으나 비트마스킹이라는 용어를 본 것 자체가 힌트가 되었다.
+
+느렸던 코드(시간 초과 발생)에서는 주자 상태를 배열로 관리하며 1루타는 각 1칸 씩 옮기고, 2루타는 각 2칸 씩 옮기는 식으로 배열을 수정했다.
+하지만 이런 방식은 너무 느렸고, 아예 각 주자 상태 당 1/2/3루타/홈런을 맞이한 경우에 옮겨갈 상태를 저장하는 식으로 수정했다.
+
+그리고 함수 안에 함수를 정의하는 식으로 만들어서 썼었는데, 그 함수 호출을 죄다 제거하니까 훨씬 빨라졌다. 2초 대 후반 걸리던 게 0초 대 후반까지 떨어졌다. 
+    --->>> 말 안 된다. 함수 호출이 이렇게 비효율적일 수가 있나? 아무리 permutations랑 N개만큼 해서, 총 200만 번 정도 실행한다지만 이게 이렇게 차이가 나네...
 
 """
 
@@ -27,8 +37,6 @@ hits_list = []
 for _ in range(n):
     hits_list.append(list(map(int, input().split())))
 
-
-total_set_time = 0
 hitter_counter = 0
 
 field_map = [[0] * 5 for _ in range(8)]
@@ -60,7 +68,6 @@ field_map = [
 """
 
 def play_one_round(hitters: list[int], hits: list[int]) -> int:
-    # field = [0, 0, 0]
     field = 0
     out_count = 0
     this_round_score = 0
@@ -71,82 +78,21 @@ def play_one_round(hitters: list[int], hits: list[int]) -> int:
         hitter_counter += 1
         return hitter
     
-    
-    def set_new_field_and_get_extra_score(hit: int) -> int:
-        # new_field = [0, 0, 0]
-        # len_field = len(field)
-        
-        def do(hit: int) -> int:
-            nonlocal field
-            
-            f, s = field_map[field][hit]
-            field = f
-            return s
-        
-            # score = 0
-            
-            # # 홈런은 점수 추가하고 판 초기화
-            # if hit == 4:
-            #     score = sum(field) + 1
-            #     field[:] = [0, 0, 0]
-            #     return score
-            
-            # # 기존 주자들 진루
-            # for i in range(len_field - 1, -1, -1):
-            #     if field[i] == 1:
-            #         if i + hit >= len_field:
-            #             score += 1
-            #             field[i] = 0
-            #         else:
-            #             field[i] = 0
-            #             field[i + hit] = 1
-            
-            # # for i in range(len_field):
-            # #     if field[i] == 1:
-            # #         if i + hit >= len_field:
-            # #             score += 1
-            # #             new_field[i] == 0
-            # #         else:
-            # #             new_field[i + hit] = 1
-
-            # # 새로운 주자 추가
-            # field[hit - 1] = 1
-            # # if 0 <= hit - 1 <= len_field:
-            # #     new_field[hit - 1] = 1
-            
-            # # field[:] = new_field
-            # return score
-                
-        if 1 <= hit <= 4:
-            return do(hit)
-        else:
-            raise Exception("unreachable!")
-            
-    
-    def play_hitter(hitter: int):
-        global total_set_time
-        nonlocal out_count, this_round_score
-        #print(f"hitter number: {hitter}  ", end=" -->>  ")
-        if hits[hitter] == 0:
-            #print("아웃!")
-            out_count += 1
-        else:
-            set_s = time()
-            extra_score = set_new_field_and_get_extra_score(hits[hitter])
-            total_set_time += time() - set_s
-            #print("extra_score: ", extra_score)
-            this_round_score += extra_score
-     
-    
     hitter = next_hitter()
     while True:
-        play_hitter(hitter)
-        # print(field)
+        
+        if hits[hitter] == 0:
+            out_count += 1
+        else:
+            f, s = field_map[field][hits[hitter]]
+            field = f
+            this_round_score += s
+            
+        
         if out_count >= 3:
             break
         hitter = next_hitter()
     
-    # print("this_round_score: ", this_round_score)
     return this_round_score
 
 
@@ -159,44 +105,21 @@ def play_rounds(hitters: list[int], hits_for_round: list[list[int]]) -> int:
     return total_score
 
 
-total_s = time()
+# total_s = time()
 candidates = [1,2,3,4,5,6,7,8]
 mx = -1
 acc = 0
 for cur in permutations(candidates, 8):
     hitter_counter = 0
-    s = time()
     c = list(cur)
     hitters = c[:3] + [0] + c[3:]
-    acc += time() - s
-    #print("hitters: ", hitters)
-    
-    # odds = []
-    # evens = []
-    # is_odd = True
-    # while len(hits_list) > 0:
-    #     if is_odd:
-    #         odds.append(hits_list.pop())
-    #     else:
-    #         evens.append(hits_list.pop())
-    #     is_odd = not is_odd
+
     s = play_rounds(hitters, hits_list)
-    # if s == 53:
-    #     print("53찾았다.")
-    #     print(hitters)
-    #     print([hits_list[0][hitter] for hitter in hitters])
-    
-    # if s == 46:
-    #     print("46찾았따.")
-    #     break
-    
-    #print(f"s: {s}")
+
     mx = max(mx, s)
-    # break
+
     
-print("total time : ", time() - total_s)
-print("total set time : ", total_set_time)
+# print("total time : ", time() - total_s)
     
-print("acc time : ", acc)
 print(mx)
     
